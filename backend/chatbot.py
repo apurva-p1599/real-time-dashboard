@@ -54,7 +54,7 @@ def analyze_question(user_input):
             aid_suggestions.append(f"{ngo_name} has {resource_type} available at {location}.")
         
         # Building a detailed prompt for Gemini
-        prompt = f"The following NGOs have aid available: {', '.join(aid_suggestions)}. Based on the user's question: '{user_input}', generate a helpful suggestion. kindly ignore those aid which has no location specified."
+        prompt = f"The following NGOs have aid available: {', '.join(aid_suggestions)}. Based on the user's question: '{user_input}', generate a helpful suggestion and include straight suggestion or information no other additional fillers. kindly ignore those aid which has no location specified. "
         return get_gemini_response(prompt)
     
     return "Sorry, I cannot answer that question right now."
