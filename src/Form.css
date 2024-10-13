@@ -1,0 +1,57 @@
+/* Form.css */
+.resource-form {
+    max-width: 600px; /* Set a maximum width for the form */
+    margin: 20px auto; /* Center the form horizontally */
+    padding: 20px; /* Add padding inside the form */
+    background-color: #f9f9f9; /* Light background color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  }
+  
+  .resource-form h2 {
+    text-align: center; /* Center the heading */
+    color: #333; /* Darker color for the heading */
+  }
+  
+  .resource-form label {
+    display: block; /* Each label takes a full line */
+    margin-bottom: 8px; /* Space between label and input */
+    font-weight: bold; /* Bold labels */
+    color: #555; /* Slightly lighter color for labels */
+  }
+  
+  .resource-form input,
+  .resource-form select,
+  .resource-form textarea {
+    width: 100%; /* Full width for input fields */
+    padding: 10px; /* Inner padding for input fields */
+    margin-bottom: 15px; /* Space between inputs */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 4px; /* Rounded corners for input fields */
+    font-size: 16px; /* Larger font size */
+  }
+  
+  .resource-form input:focus,
+  .resource-form select:focus,
+  .resource-form textarea:focus {
+    border-color: #66afe9; /* Border color when focused */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px rgba(102, 175, 233, 0.6); /* Light shadow for focus */
+  }
+  
+  .resource-form button {
+    width: 100%; /* Full width for button */
+    padding: 10px; /* Inner padding for button */
+    background-color: #5cb85c; /* Bootstrap green color */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Rounded corners */
+    color: white; /* White text color */
+    font-size: 16px; /* Larger font size */
+    cursor: pointer; /* Pointer cursor for button */
+    transition: background-color 0.3s; /* Smooth transition */
+  }
+  
+  .resource-form button:hover {
+    background-color: #4cae4c; /* Darker green on hover */
+  }
+  

@@ -1,24 +1,26 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Dashboard from './Dashboard';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ResourceFormPage from './ResourceFormPage';  // Import the new page for the form
+import NgoCoordination from './ngocordination';    // Import the NGO Coordination component
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          {/* Route for Dashboard */}
+          <Route path="/" element={<Dashboard />} />
+
+          {/* Route for Resource Allocation Form */}
+          <Route path="/allocate-resource" element={<ResourceFormPage />} />
+
+          {/* Route for NGO Coordination */}
+          <Route path="/ngo-coordination" element={<NgoCoordination />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
