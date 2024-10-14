@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from flask_cors import CORS  # Import CORS
+from modules.chatbot import chatbot_bp
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)  # Allow credentials
@@ -59,6 +60,8 @@ def submit_form():
     except Exception as e:
         print("Error inserting into database:", e)
         return jsonify({"message": "Error allocating resource"}), 500
+
+app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
 
 if __name__ == "__main__":
     app.run(debug=True,port='5000')

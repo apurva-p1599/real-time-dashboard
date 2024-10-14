@@ -43,7 +43,7 @@ export default function Chat() {
 
     async function AIprompt(text) {
         try {
-            await fetch(`http://localhost:5000/chatbot`, {
+            await fetch(`http://localhost:5000/chatbot/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
