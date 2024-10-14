@@ -71,7 +71,6 @@ def analyze_question(user_input):
 # Flask route for chatbot interaction
 @chatbot_bp.route('/', methods=['POST'])
 def chatbot():
-    print(client)
     user_input = request.json['question']
     answer = analyze_question(user_input)
 
