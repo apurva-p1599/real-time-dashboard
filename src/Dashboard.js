@@ -1,78 +1,84 @@
-// Dashboard.js
-import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import './Dashboard.css';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate
-
-// Fix default marker icons in Leaflet
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-});
+import React from 'react';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link for navigation
+import './Dashboard.css'; // Make sure to have appropriate CSS styles
 
 const Dashboard = () => {
-  const [earthquakes, setEarthquakes] = useState([]);
-  const navigate = useNavigate();  // Initialize navigate function
-
-  useEffect(() => {
-    // Fetch earthquake data from USGS
-    fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson')
-      .then(response => response.json())
-      .then(data => {
-        setEarthquakes(data.features); // Store earthquake data in state
-      })
-      .catch(error => console.error('Error fetching earthquake data:', error));
-  }, []);
+  const navigate = useNavigate();
 
   const handleResourceAllocationClick = () => {
     navigate('/allocate-resource');  // Navigate to the form page
   };
 
-  const handleNgoCoordinationClick =() =>{
+  const handleNgoCoordinationClick = () => {
     navigate('/ngo-coordination');
   };
 
   return (
-    <div className="dashboard">
-      <div className="sidebar">
-        <h2>Real-Time Updates</h2>
+    <div className="dashboard" style={{ display: 'flex', height: '100vh' }}>
+      <div className="sidebar" style={{ width: '250px', padding: '20px', backgroundColor: '#333', color: 'white' }}>
+        <h2>AidTech</h2>
         <ul>
-          <li>Heatmaps</li>
+          <li>
+            <Link to="/heatmaps" style={{ textDecoration: 'none', color: 'white' }}>
+              Heatmaps
+            </Link>
+          </li>
           <li onClick={handleResourceAllocationClick} style={{ cursor: 'pointer' }}>
-            Resource Allocation
+            NGO Resource Information
           </li>
           <li onClick={handleNgoCoordinationClick}>NGO Coordination</li>
         </ul>
-        <button className="live-updates-btn">Live Updates</button>
+        {/* Green Button for Real-Time Updates */}
+        <button
+          onClick={() => navigate('/real-time-updates')} // Direct navigation to the real-time updates page
+          style={{
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            padding: '10px',
+            cursor: 'pointer',
+            marginTop: '20px',
+            width: '100%',
+            borderRadius: '5px',
+          }}
+        >
+          Real-Time Updates
+        </button>
       </div>
 
-      <div className="map-container">
-        <MapContainer center={[20, 0]} zoom={2} style={{ height: "90vh", width: "100%" }}>
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          {earthquakes.map((quake, index) => {
-            const { geometry, properties } = quake;
-            const position = [geometry.coordinates[1], geometry.coordinates[0]]; // [latitude, longitude]
-
-            return (
-              <Marker key={index} position={position}>
-                <Popup>
-                  <div>
-                    <strong>Magnitude:</strong> {properties.mag} <br />
-                    <strong>Location:</strong> {properties.place} <br />
-                    <strong>Time:</strong> {new Date(properties.time).toLocaleString()}
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          })}
-        </MapContainer>
+      <div className="content-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px', overflowY: 'auto' }}>
+        <img
+          src="/Users/merlinsimoes/Documents/GraingerProject/disasterimage.jpg" // Replace with the actual image URL
+          alt="Volunteers assisting in disaster management"
+          style={{
+            maxWidth: '100%', // Responsive image width
+            height: 'auto', // Maintain aspect ratio
+            borderRadius: '5px', // Rounded corners for aesthetics
+            boxShadow: '0 2px 5px rgba(0,0,0,0.1)', // Subtle shadow for depth
+            marginBottom: '20px', // Space between images
+          }}
+        />
+        <img
+          src="https://example.com/image2.jpg" // Replace with the actual image URL
+          alt="Emergency supplies ready for distribution"
+          style={{
+            maxWidth: '100%', // Responsive image width
+            height: 'auto', // Maintain aspect ratio
+            borderRadius: '5px', // Rounded corners for aesthetics
+            boxShadow: '0 2px 5px rgba(0,0,0,0.1)', // Subtle shadow for depth
+            marginBottom: '20px', // Space between images
+          }}
+        />
+        <img
+          src="https://example.com/image3.jpg" // Replace with the actual image URL
+          alt="Community members participating in a disaster preparedness drill"
+          style={{
+            maxWidth: '100%', // Responsive image width
+            height: 'auto', // Maintain aspect ratio
+            borderRadius: '5px', // Rounded corners for aesthetics
+            boxShadow: '0 2px 5px rgba(0,0,0,0.1)', // Subtle shadow for depth
+          }}
+        />
       </div>
     </div>
   );

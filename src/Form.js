@@ -10,24 +10,37 @@ function ResourceForm() {
     location: '',
     allocation_date: '',
     allocated_by: '',
-    allocated_to: '',
+    age_group: '',
     purpose: '',
     priority_level: '',
   });
+  
+  const [loading, setLoading] = useState(false); // State for loading
+  const [errorMessage, setErrorMessage] = useState(''); // State for error messages
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setErrorMessage(''); // Clear any previous error messages on input change
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Basic validation
+    if (!formData.ngo_name || !formData.resource_type || !formData.quantity || !formData.unit_of_measurement || !formData.location || !formData.allocation_date || !formData.allocated_by || !formData.age_group || !formData.purpose || !formData.priority_level) {
+      setErrorMessage('Please fill in all fields before submitting.');
+      return;
+    }
 
     // Send data to the backend for database storage
+    setLoading(true); // Start loading
+    setErrorMessage(''); // Clear previous error messages
+
     try {
-      console.log(JSON.stringify(formData))
+      console.log(JSON.stringify(formData));
       const response = await fetch('http://localhost:5000/allocate-resource', {
         method: 'POST',
         headers: {
@@ -47,22 +60,31 @@ function ResourceForm() {
           location: '',
           allocation_date: '',
           allocated_by: '',
-          allocated_to: '',
+          age_group: '',
           purpose: '',
           priority_level: '',
         });
       } else {
-        alert('Failed to allocate resource. Please try again.');
+        // Check for CORS and other response errors
+        const errorResponse = await response.json();
+        setErrorMessage(errorResponse.message || 'Failed to allocate resource. Please try again.');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while allocating the resource. Please try again.');
+      if (error.name === 'TypeError' && error.message.includes('NetworkError')) {
+        setErrorMessage('Network error. Please ensure the server is running and CORS is enabled.');
+      } else {
+        setErrorMessage('An error occurred while allocating the resource. Please try again.');
+      }
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   return (
     <div className="resource-form">
       <h2>Allocate Resource</h2>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Display error message */}
       <form onSubmit={handleSubmit}>
         <label>
           NGO Name:
@@ -142,11 +164,11 @@ function ResourceForm() {
         </label>
         <br />
         <label>
-          Allocated To:
+          Age Group:
           <input
             type="text"
-            name="allocated_to"
-            value={formData.allocated_to}
+            name="age_group"
+            value={formData.age_group}
             onChange={handleChange}
             required
           />
@@ -172,7 +194,7 @@ function ResourceForm() {
           </select>
         </label>
         <br />
-        <button type="submit">Allocate Resource</button>
+        <button type="submit" disabled={loading}>{loading ? 'Allocating...' : 'Allocate Resource'}</button>
       </form>
     </div>
   );

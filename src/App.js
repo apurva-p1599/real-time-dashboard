@@ -1,22 +1,21 @@
 import React from 'react';
 import './App.css';
 import Dashboard from './Dashboard';
+import RealTimeUpdates from './RealTimeUpdates'; // Import the RealTimeUpdates component
+import Heatmaps from './Heatmaps'; // Import the Heatmaps component
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ResourceFormPage from './ResourceFormPage';  // Import the new page for the form
-import NgoCoordination from './ngocordination';    // Import the NGO Coordination component
+import ResourceFormPage from './ResourceFormPage';  
+import NgoCoordination from './ngocordination';    
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
-          {/* Route for Dashboard */}
           <Route path="/" element={<Dashboard />} />
-
-          {/* Route for Resource Allocation Form */}
+          <Route path="/real-time-updates" element={<RealTimeUpdates />} />
+          <Route path="/heatmaps" element={<Heatmaps />} /> {/* New Route for Heatmaps */}
           <Route path="/allocate-resource" element={<ResourceFormPage />} />
-
-          {/* Route for NGO Coordination */}
           <Route path="/ngo-coordination" element={<NgoCoordination />} />
         </Routes>
       </div>
