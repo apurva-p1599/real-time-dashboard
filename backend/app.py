@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)  # Allow credentials
 
 # MongoDB connection string
-mongo_uri = "mongodb+srv://apatil62:Aidtechinnovators@cluster0.cbtq3.mongodb.net/resource_allocation?retryWrites=true&w=majority"
+mongo_uri = os.environ.get("MONGO_STRING")
 client = MongoClient(mongo_uri)
 db = client['resource_allocation']  # Replace with your database name
 collection = db['form_entries']  # Replace with your collection name
