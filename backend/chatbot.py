@@ -41,24 +41,39 @@ def get_gemini_response(prompt):
         return "Error fetching response from Gemini."
 
 def analyze_question(user_input):
-    # Querying MongoDB for aid-related information
-    if "aid" in user_input.lower():
-        available_aid = collection.find({})
-        aid_suggestions = []
-        for aid in available_aid:
-            # Using .get() to avoid KeyError if the field is missing
-            ngo_name = aid.get('ngo_name', 'Unknown NGO')
-            resource_type = aid.get('resource_type', 'Unknown Resource')
-            location = aid.get('location', 'Unknown Location')
-            
-            aid_suggestions.append(f"{ngo_name} has {resource_type} available at {location}.")
-        
-        # Building a detailed prompt for Gemini
-        prompt = f"The following NGOs have aid available: {', '.join(aid_suggestions)}. Based on the user's question: '{user_input}', generate a helpful suggestion and include straight suggestion or information no other additional fillers. kindly ignore those aid which has no location specified. "
-        return get_gemini_response(prompt)
-    
-    return "Sorry, I cannot answer that question right now."
+    # Retrieve all entries from the database
+    all_entries = collection.find({})
 
+    # Format the results to pass to the model
+    results = []
+    for entry in all_entries:
+        results.append({
+            "ngo_name": entry.get("ngo_name", "Unknown NGO"),
+            "resource_type": entry.get("resource_type", "Unknown Resource"),
+            "quantity": entry.get("quantity", "N/A"),
+            "unit_of_measurement": entry.get("unit_of_measurement", "N/A"),
+            "location": entry.get("location", "Unknown Location"),
+            "allocation_date": entry.get("allocation_date", "N/A"),
+            "allocated_by": entry.get("allocated_by", "N/A"),
+            "allocated_to": entry.get("allocated_to", "N/A"),
+            "purpose": entry.get("purpose", "N/A"),
+            "priority_level": entry.get("priority_level", "N/A"),
+        })
+
+    # Construct the detailed prompt for the model
+    formatted_results = "\n".join(
+        [f"{result['ngo_name']} has {result['quantity']} {result['unit_of_measurement']} of {result['resource_type']} for {result['purpose']} at {result['location']} (allocated by {result['allocated_by']}, allocated to {result['allocated_to']}, priority level: {result['priority_level']}, allocation date: {result['allocation_date']})"
+         for result in results]
+    )
+
+    # Build the complete prompt for the AI model
+    prompt = (
+    f"You are a Disaster Resource Coordinator. Your primary role is to assist users by providing clear, concise, and relevant information regarding disaster-related resources and aid available from various NGOs. Politely decline any requests that do not pertain to disasters or resource allocation.\n\n"
+    f"User Query: {user_input}\n\n"
+    f"Available Resources:\n{formatted_results}\n\n"
+    f"Based on the information provided, deliver a concise response highlighting the available resources. Use common symbols like double quotes for emphasis on important points. Format your response with bullet points for multiple pieces of information. Always assume the user is asking about available resources in the database; if relevant data exists, present it directly without prefacing with phrases like 'While I don't have generic information, I found...' or similar statements."
+)
+    
 # Flask route for chatbot interaction
 @app.route('/chatbot', methods=['POST'])
 def chatbot():
