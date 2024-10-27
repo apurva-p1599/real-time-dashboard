@@ -5,10 +5,12 @@ from flask_cors import CORS  # Import CORS
 from modules.chatbot import chatbot_bp
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)  # Allow credentials
+
+# Enable CORS for the frontend origin and allow credentials
+CORS(app, origins=["http://localhost:3000"], supports_credentials=True)
 
 # MongoDB connection string
-mongo_uri = os.environ.get("MONGO_STRING")
+mongo_uri = os.environ.get("MONGO_STRING", "mongodb://localhost:27017/")  # Use default if MONGO_STRING is not set
 client = MongoClient(mongo_uri)
 db = client['resource_allocation']  # Replace with your database name
 collection = db['form_entries']  # Replace with your collection name
@@ -33,13 +35,15 @@ def submit_form():
     data = request.json
     print("Received data:", data)  # Log incoming data
 
+    # Check if all required fields are present
     if not all(field in data for field in ["ngo_name", "resource_type", "quantity", 
-                                             "unit_of_measurement", "location", 
-                                             "allocation_date", "allocated_by", 
-                                             "allocated_to", "purpose", "priority_level"]):
-        print ("Missing fields")
+                                           "unit_of_measurement", "location", 
+                                           "allocation_date", "allocated_by", 
+                                           "age_group", "purpose", "priority_level"]):
+        print("Missing fields")
         return jsonify({"message": "Missing fields"}), 400
     
+    # Create form entry for MongoDB
     form_entry = {
         "ngo_name": data['ngo_name'],
         "resource_type": data['resource_type'],
@@ -48,21 +52,24 @@ def submit_form():
         "location": data['location'],
         "allocation_date": data['allocation_date'],
         "allocated_by": data['allocated_by'],
-        "allocated_to": data['allocated_to'],
+        "age_group": data['age_group'],  # Updated to 'age_group'
         "purpose": data['purpose'],
         "priority_level": data['priority_level']
     }
-    print ("Form entry successful")
+    print("Form entry successful")
     
+    # Insert form entry into MongoDB
     try:
-        collection.insert_one(data)
-        print ('data inserted')
+        collection.insert_one(form_entry)
+        print('Data inserted successfully')
         return jsonify({"message": "Form submitted successfully!"}), 201
     except Exception as e:
         print("Error inserting into database:", e)
         return jsonify({"message": "Error allocating resource"}), 500
 
+# Register the chatbot blueprint
 app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
 
+# Run the Flask app on port 5000
 if __name__ == "__main__":
-    app.run(debug=True,port='5000')
+    app.run(debug=True, port=5000)
