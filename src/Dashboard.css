@@ -19,14 +19,12 @@
   text-align: center;
 }
 
-/* Dashboard.css */
-
 .sidebar h2 {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #e74c3c; /* Vibrant color for brand */
-  text-align: center; /* Center-align the text */
+  color: #e74c3c;
+  text-align: center;
 }
 
 .sidebar ul {
@@ -82,9 +80,10 @@
 }
 
 .content-container img {
-  max-width: 100%;
+  width: 90%; /* Make the image take up most of the container's width */
+  max-width: 1200px; /* Limit the maximum width for larger screens */
   height: auto;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* Add rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Darker shadow for emphasis */
   margin-bottom: 20px;
 }

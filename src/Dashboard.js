@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Dashboard.css'; // Include CSS styles
-import disasterImage from './assets/aid.jpg'; // Replace with actual image path
+import disasterImage from './assets/disaster.jpg'; // Replace with actual image path
 
 const Dashboard = () => {
   const navigate = useNavigate();
