@@ -29,7 +29,7 @@ const ResourceFormPage = () => {
         Back to Dashboard
       </button>
 
-      <h2 style={{ textAlign: 'center', marginTop: '60px' }}>Resource Allocation Page</h2>
+      <h2 style={{ textAlign: 'center', marginTop: '60px' }}>Resource Information Page</h2>
       <ResourceForm />  {/* Display the form */}
     </div>
   );

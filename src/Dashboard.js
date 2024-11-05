@@ -1,13 +1,13 @@
 import React from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link for navigation
-import './Dashboard.css'; // Make sure to have appropriate CSS styles
-import disasterImage from './assets/disasterimage.jpg';
+import { useNavigate, Link } from 'react-router-dom';
+import './Dashboard.css'; // Include CSS styles
+import disasterImage from './assets/aid.jpg'; // Replace with actual image path
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
   const handleResourceAllocationClick = () => {
-    navigate('/allocate-resource');  // Navigate to the form page
+    navigate('/allocate-resource');
   };
 
   const handleNgoCoordinationClick = () => {
@@ -15,50 +15,34 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard" style={{ display: 'flex', height: '100vh' }}>
-      <div className="sidebar" style={{ width: '250px', padding: '20px', backgroundColor: '#333', color: 'white' }}>
+    <div className="dashboard">
+      <div className="sidebar">
         <h2>AidTech</h2>
         <ul>
           <li>
-            <Link to="/heatmaps" style={{ textDecoration: 'none', color: 'white' }}>
-              Heatmaps
-            </Link>
+            <Link to="/heatmaps">Heatmaps</Link>
           </li>
-          <li onClick={handleResourceAllocationClick} style={{ cursor: 'pointer' }}>
+          <li onClick={handleResourceAllocationClick}>
             NGO Resource Information
           </li>
           <li onClick={handleNgoCoordinationClick}>NGO Coordination</li>
         </ul>
-        {/* Green Button for Real-Time Updates */}
-        <button
-          onClick={() => navigate('/real-time-updates')} // Direct navigation to the real-time updates page
-          style={{
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            padding: '10px',
-            cursor: 'pointer',
-            marginTop: '20px',
-            width: '100%',
-            borderRadius: '5px',
-          }}
-        >
+        <button onClick={() => navigate('/real-time-updates')}>
           Real-Time Updates
         </button>
       </div>
 
-      <div className="content-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px', overflowY: 'auto' }}>
+      <div className="content-container">
         <img
-          src={disasterImage}// Replace with the actual image URL
+          src={disasterImage}
           alt="Volunteers assisting in disaster management"
-          style={{
-            maxWidth: '100%', // Responsive image width
-            height: 'auto', // Maintain aspect ratio
-            borderRadius: '5px', // Rounded corners for aesthetics
-            boxShadow: '0 2px 5px rgba(0,0,0,0.1)', // Subtle shadow for depth
-            marginBottom: '20px', // Space between images
-          }}
+          className="dashboard-image"
         />
+        <h3 style={{ color: '#2c3e50' }}>Welcome to AidTech</h3>
+        <p style={{ color: '#7f8c8d', textAlign: 'center', maxWidth: '600px' }}>
+          AidTech provides real-time updates and resources to support disaster relief efforts.
+          Browse through our heatmaps, resource information, and coordination tools to find what you need.
+        </p>
       </div>
     </div>
   );
