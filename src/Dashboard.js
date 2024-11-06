@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaMapMarkedAlt, FaHandsHelping, FaSyncAlt , FaBoxOpen} from 'react-icons/fa';
+import { FaMapMarkedAlt, FaHandsHelping, FaSyncAlt, FaBoxOpen } from 'react-icons/fa';
 import './Dashboard.css';
-import disasterImage from './assets/Disasterimg.jpg'; // Replace with your own image
+import disasterImage from './assets/disaster.jpg';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -25,8 +25,6 @@ const Dashboard = () => {
         <nav className="navigation">
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
-          
-     
         </nav>
       </header>
 
@@ -36,16 +34,10 @@ const Dashboard = () => {
           <h1>Bridging Hope and Help</h1>
           <p>Help today because tomorrow you may be the one who needs helping!</p>
 
-          {/* Hero Buttons */}
-          <div className="">
-            
-
-            {/* Real-Time Updates Button */}
-            
-            <button onClick={() => navigate('/real-time-updates')} className="real-time-updates-btn2">
+          {/* Real-Time Updates Button */}
+          <button onClick={() => navigate('/real-time-updates')} className="real-time-updates-btn2">
               <FaSyncAlt className="icon" /> Real-Time Updates
               </button>
-          </div>
         </div>
       </section>
 
@@ -56,7 +48,7 @@ const Dashboard = () => {
           <FaMapMarkedAlt className="icon" />
           <h3>Heatmaps</h3>
           <p>Explore disaster heatmaps to understand affected areas.</p>
-          <Link to="/heatmaps">Read More</Link>
+          <Link to="/heatmaps" className="read-more-link">Read More</Link>
         </div>
 
         {/* NGO Resource Info */}
@@ -64,7 +56,7 @@ const Dashboard = () => {
           <FaBoxOpen className="icon" />
           <h3>NGO Resource Info</h3>
           <p>Access detailed NGO resource information for better coordination.</p>
-          <a href="#">Read More</a>
+          <Link to="#" onClick={handleResourceAllocationClick} className="read-more-link">Read More</Link>
         </div>
 
         {/* NGO Coordination */}
@@ -72,7 +64,7 @@ const Dashboard = () => {
           <FaHandsHelping className="icon" />
           <h3>NGO Coordination</h3>
           <p>Coordinate with NGOs for effective disaster management.</p>
-          <a href="#">Read More</a>
+          <Link to="#" onClick={handleNgoCoordinationClick} className="read-more-link">Read More</Link>
         </div>
       </section>
     </div>

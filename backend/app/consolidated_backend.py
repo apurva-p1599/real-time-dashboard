@@ -5,6 +5,7 @@ from pymongo import MongoClient
 import requests
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
+from math import radians, sin, cos, sqrt, atan2
 
 # Load environment variables
 load_dotenv()
@@ -18,6 +19,7 @@ mongo_uri = os.getenv("MONGO_STRING", "mongodb://localhost:27017/")
 client = MongoClient(mongo_uri)
 db = client['resource_allocation']
 collection = db['form_entries']
+disaster_collection = db['disasters']
 
 # Check MongoDB connection at startup
 try:
@@ -43,7 +45,7 @@ def submit_form():
 
     data = request.json
     required_fields = [
-        "ngo_name", "resource_type", "quantity", "unit_of_measurement",
+        "ngo_name", "resource_type", "quantity", "resource_details",
         "location", "allocation_date", "allocated_by", "age_group", "purpose", "priority_level"
     ]
     if not all(field in data and data[field] for field in required_fields):
@@ -53,7 +55,7 @@ def submit_form():
         "ngo_name": data['ngo_name'],
         "resource_type": data['resource_type'],
         "quantity": data['quantity'],
-        "unit_of_measurement": data['unit_of_measurement'],
+        "resource_details": data['resource_details'],
         "location": data['location'],
         "allocation_date": data['allocation_date'],
         "allocated_by": data['allocated_by'],
@@ -70,7 +72,53 @@ def submit_form():
         print("Error inserting into database:", e)
         return jsonify({"message": "Error allocating resource"}), 500
 
-# Chatbot Blueprint
+# Haversine formula to calculate distance between two GPS coordinates
+def calculate_distance(lat1, lon1, lat2, lon2):
+    R = 6371  # Radius of the Earth in kilometers
+    dlat = radians(lat2 - lat1)
+    dlon = radians(lon2 - lon1)
+    a = sin(dlat / 2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    distance = R * c
+    return distance
+
+# Endpoint to check if NGO is within range of a disaster location
+@app.route('/check-arrival', methods=['POST'])
+def check_arrival():
+    data = request.json
+    ngo_lat = data.get("latitude")
+    ngo_lon = data.get("longitude")
+    disaster_id = data.get("disaster_id")
+
+    if not ngo_lat or not ngo_lon:
+        return jsonify({"error": "Latitude and longitude are required for the NGO location."}), 400
+
+    try:
+        ngo_lat, ngo_lon = float(ngo_lat), float(ngo_lon)
+    except ValueError:
+        return jsonify({"error": "Invalid latitude or longitude format."}), 400
+
+    disaster = disaster_collection.find_one({"disaster_id": disaster_id})
+    if not disaster:
+        return jsonify({"error": "Disaster location not found"}), 404
+
+    disaster_lat = disaster.get("latitude")
+    disaster_lon = disaster.get("longitude")
+    arrival_radius_km = disaster.get("arrival_radius_km", 0.5)
+
+    if disaster_lat is None or disaster_lon is None:
+        return jsonify({"error": "Disaster coordinates are incomplete."}), 500
+
+    distance = calculate_distance(ngo_lat, ngo_lon, disaster_lat, disaster_lon)
+
+    if distance <= arrival_radius_km:
+        message = f"{data.get('ngo_name', 'NGO')} has arrived at the Disaster Location."
+        return jsonify({"arrivalConfirmed": True, "distance_km": distance, "message": message})
+    else:
+        message = f"{data.get('ngo_name', 'NGO')} has not yet arrived at the disaster location."
+        return jsonify({"arrivalConfirmed": False, "distance_km": distance, "message": message})
+
+# Chatbot functionality
 chatbot_bp = Blueprint('chatbot', __name__)
 CORS(chatbot_bp, origins=["http://localhost:3000"], supports_credentials=True)
 
@@ -94,7 +142,7 @@ def analyze_question(user_input):
             "ngo_name": entry.get("ngo_name", "Unknown NGO"),
             "resource_type": entry.get("resource_type", "Unknown Resource"),
             "quantity": entry.get("quantity", "N/A"),
-            "unit_of_measurement": entry.get("unit_of_measurement", "N/A"),
+            "resource_details": entry.get("resource_details", "N/A"),
             "location": entry.get("location", "Unknown Location"),
             "allocation_date": entry.get("allocation_date", "N/A"),
             "allocated_by": entry.get("allocated_by", "N/A"),
@@ -104,7 +152,7 @@ def analyze_question(user_input):
         })
 
     formatted_results = "\n".join(
-        [f"{result['ngo_name']} has {result['quantity']} {result['unit_of_measurement']} of {result['resource_type']} for {result['purpose']} at {result['location']} "
+        [f"{result['ngo_name']} has {result['quantity']} {result['resource_details']} of {result['resource_type']} for {result['purpose']} at {result['location']} "
          f"(allocated by {result['allocated_by']}, age group: {result['age_group']}, priority level: {result['priority_level']}, allocation date: {result['allocation_date']})"
          for result in results]
     )
@@ -182,7 +230,6 @@ def get_top_headlines():
     data = fetch_top_headlines()
     return jsonify(data)
 
-# Register the news blueprint
 app.register_blueprint(news_bp)
 
 if __name__ == "__main__":

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import './Form.css'; // Import the CSS file with the new background styles
+import './Form.css';
 
 function ResourceForm() {
   const [formData, setFormData] = useState({
     ngo_name: '',
     resource_type: '',
     quantity: '',
-    unit_of_measurement: '',
+    resource_details: '',
     location: '',
     allocation_date: '',
     allocated_by: '',
@@ -15,21 +15,24 @@ function ResourceForm() {
     priority_level: '',
   });
   
-  const [loading, setLoading] = useState(false); // State for loading
-  const [errorMessage, setErrorMessage] = useState(''); // State for error messages
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const disaster_id = "disaster001"; // Replace with actual disaster ID for validation
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setErrorMessage(''); // Clear any previous error messages on input change
+    setErrorMessage('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!formData.ngo_name || !formData.resource_type || !formData.quantity || !formData.unit_of_measurement || !formData.location || !formData.allocation_date || !formData.allocated_by || !formData.age_group || !formData.purpose || !formData.priority_level) {
+    if (!formData.ngo_name || !formData.resource_type || !formData.quantity || !formData.resource_details || !formData.location || !formData.allocation_date || !formData.allocated_by || !formData.age_group || !formData.purpose || !formData.priority_level) {
       setErrorMessage('Please fill in all fields before submitting.');
       return;
     }
@@ -52,7 +55,7 @@ function ResourceForm() {
           ngo_name: '',
           resource_type: '',
           quantity: '',
-          unit_of_measurement: '',
+          resource_details: '',
           location: '',
           allocation_date: '',
           allocated_by: '',
@@ -72,11 +75,107 @@ function ResourceForm() {
     }
   };
 
+  const handleLocateMe = () => {
+    if (navigator.geolocation) {
+        setLocationLoading(true);
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setLatitude(latitude);
+                setLongitude(longitude);
+                setFormData((prevData) => ({
+                    ...prevData,
+                    location: `Lat: ${latitude.toFixed(6)}, Long: ${longitude.toFixed(6)}`,
+                }));
+                console.log("Latitude:", latitude, "Longitude:", longitude);
+                setLocationLoading(false);
+                setErrorMessage('');
+            },
+            (error) => {
+                setLocationLoading(false);
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        setErrorMessage("Location access was denied. Please allow location access in your browser settings.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        setErrorMessage("Location information is unavailable. Try again or check device settings.");
+                        break;
+                    case error.TIMEOUT:
+                        setErrorMessage("The request to get your location timed out. Please try again.");
+                        break;
+                    default:
+                        setErrorMessage("An unknown error occurred while fetching location.");
+                        break;
+                }
+            }
+        );
+    } else {
+        setErrorMessage("Geolocation is not supported by this browser.");
+    }
+};
+
+async function checkArrival(latitude, longitude, disaster_id, ngo_name) {
+  // Check if all required parameters are provided
+  if (!latitude || !longitude || !disaster_id || !ngo_name) {
+      alert("All fields (latitude, longitude, disaster ID, and NGO name) are required.");
+      console.error("Missing parameters:", { latitude, longitude, disaster_id, ngo_name });
+      return;
+  }
+
+  try {
+      const response = await fetch("http://127.0.0.1:5000/check-arrival", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ latitude, longitude, disaster_id, ngo_name })
+      });
+
+      // Check if the response was successful
+      if (!response.ok) {
+          let errorDetails;
+          try {
+              errorDetails = await response.json();
+          } catch (parseError) {
+              console.error("Error parsing error response:", parseError);
+              alert("Server error occurred, but the response could not be parsed.");
+              return;
+          }
+          console.error("Server responded with an error:", errorDetails);
+          alert(`Server Error: ${errorDetails.error || "An unknown error occurred"}`);
+          return;
+      }
+
+      const result = await response.json();
+
+      // Check for 'arrivalConfirmed' key in the result
+      if (result.arrivalConfirmed !== undefined) {
+          alert(result.message);
+      } else {
+          console.warn("Unexpected response format:", result);
+          alert("Unexpected response from server. Please try again.");
+      }
+  } catch (error) {
+      console.error("Network or fetch error:", error);
+      alert("An error occurred while checking the arrival. Please check your connection and try again.");
+  }
+}
+
+  const handleCheckArrival = () => {
+    if (!formData.ngo_name) {
+        alert("Please enter the NGO Name.");
+        return;
+    }
+    if (latitude && longitude) {
+        checkArrival(latitude, longitude, disaster_id, formData.ngo_name);
+    } else {
+        alert("Please use the 'Locate Me' button to capture your location first.");
+    }
+};
+
   return (
-    <div className="form-page-background"> {/* Background color wrapper */}
+    <div className="form-page-background">
       <div className="resource-form">
         <h2>Allocate Resource</h2>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Display error message */}
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <label>
             NGO Name:
@@ -109,11 +208,11 @@ function ResourceForm() {
             />
           </label>
           <label>
-            Unit of Measurement:
+          Resource Details:
             <input
               type="text"
-              name="unit_of_measurement"
-              value={formData.unit_of_measurement}
+              name="resource_details"
+              value={formData.resource_details}
               onChange={handleChange}
               required
             />
@@ -127,6 +226,38 @@ function ResourceForm() {
               onChange={handleChange}
               required
             />
+            <button
+              type="button"
+              onClick={handleLocateMe}
+              style={{
+                backgroundColor: "#4CAF50",
+                color: "#fff",
+                padding: "8px 12px",
+                borderRadius: "4px",
+                border: "none",
+                cursor: "pointer",
+                marginTop: "10px",
+              }}
+              disabled={locationLoading}
+            >
+              {locationLoading ? "Locating..." : "Locate Me"}
+            </button>
+            <button
+              type="button"
+              onClick={handleCheckArrival}
+              style={{
+                backgroundColor: "#FF5733",
+                color: "#fff",
+                padding: "8px 12px",
+                borderRadius: "4px",
+                border: "none",
+                cursor: "pointer",
+                marginTop: "10px",
+                marginLeft: "10px"
+              }}
+            >
+              Check Arrival
+            </button>
           </label>
           <label>
             Allocation Date:
