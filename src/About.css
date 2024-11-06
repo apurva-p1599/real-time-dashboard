@@ -1,0 +1,205 @@
+/* General Styles */
+.about-page {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  /* Hero Section */
+  .about-hero {
+    position: relative;
+    height: 70vh;
+    background-image: url('./assets/B&W.jpg'); /* Replace with your own image */
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .about-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+  }
+  
+  .about-overlay h1 {
+    color: #fff;
+    font-size: calc(2.5rem + 0.5vw);
+    font-weight: 700;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+  }
+  
+  .about-overlay p {
+    color: #ddd;
+    font-size: calc(1.2rem + 0.2vw);
+    margin-top: 10px;
+    max-width: 800px;
+  }
+  
+  .about-overlay h1:hover,
+  .about-overlay p:hover {
+    color: #f9a825; /* Highlight color on hover */
+  }
+  
+  /* Content Section */
+  .about-content {
+    padding: 60px 20px;
+    background-color: #f7f7f7;
+  }
+  
+  .about-container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 0 20px;
+  }
+  
+  .about-container h2 {
+    font-size: calc(1.8rem + 0.3vw);
+    margin-bottom: 25px;
+    position: relative;
+    color: #333;
+  }
+  
+  .about-container h2::after {
+    content: '';
+    width: 60px;
+    height: 4px;
+    background-color: #f9a825;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    border-radius: 2px;
+  }
+  
+  .about-container p,
+  .about-container ul {
+    font-size: calc(1rem + 0.1vw);
+    color: #555;
+  }
+  
+  .about-container ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 20px;
+  }
+  
+  .about-container ul li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .about-container ul li strong {
+    color: #f9a825;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+  
+  /* List Icons */
+  .about-container ul li::before {
+    content: '✓';
+    color: #f9a825;
+    font-weight: bold;
+    margin-right: 12px;
+    font-size: 1.2em;
+  }
+  
+  /* Transitions and Hover Effects */
+  .about-container h2,
+  .about-container p,
+  .about-container ul li {
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+  
+  .about-container h2:hover {
+    color: #f9a825;
+  }
+  
+  .about-container p:hover,
+  .about-container ul li:hover {
+    transform: translateX(5px);
+    color: #333;
+  }
+  
+  /* Button for "Get Involved" Section */
+  .get-involved-button {
+    display: inline-block;
+    padding: 12px 30px;
+    margin-top: 20px;
+    background-color: #f9a825;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .get-involved-button:hover {
+    background-color: #e68900;
+    transform: translateY(-3px);
+  }
+/* Styles for the "What We Do" section */
+.about-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    max-width: 800px;
+  }
+  
+  .about-list li {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .about-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  .about-item strong {
+    color: #ff5722;
+    font-size: 1.2em;
+    min-width: 150px; /* Fixed width for alignment */
+  }
+  
+  .about-item p {
+    flex: 1; /* Takes up remaining space */
+    color: #555;
+    font-size: 1em;
+    line-height: 1.6;
+  }
+  
+  @media (max-width: 768px) {
+    /* Stack columns for mobile */
+    .about-item {
+      flex-direction: column;
+    }
+  }
+  
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .about-overlay h1 {
+      font-size: 2rem;
+    }
+    .about-overlay p {
+      font-size: 1rem;
+    }
+    .about-container h2 {
+      font-size: 1.6rem;
+    }
+  }
+  

@@ -1,0 +1,37 @@
+/* Wrapper for the chat application */
+div[style*="padding: 20px"] {
+    position: relative;
+    padding: 20px;
+  }
+  
+  /* Back to Dashboard button styling */
+  button[style*="background-color: #ff5722"] {
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[style*="background-color: #ff5722"]:hover {
+    background-color: #ae5516;
+  }
+  
+  /* Centered chat interface */
+  div[style*="display: flex; justify-content: center"] {
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Main chat container */
+  div[style*="height: 50vh; width: 70vw; max-width: 700px"] {
+    height: 50vh;
+    width: 70vw;
+    max-width: 700px;
+  }

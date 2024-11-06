@@ -22,7 +22,7 @@
 
 .resource-form h2 {
   text-align: center;
-  color: #2c3e50;
+  color: #50372c;
   font-size: 24px;
   margin-bottom: 20px;
 }
@@ -31,7 +31,7 @@
   display: block;
   margin-bottom: 6px;
   font-weight: bold;
-  color: #34495e;
+  color: #381505;
 }
 
 .resource-form input,
@@ -44,21 +44,21 @@
   border-radius: 4px;
   font-size: 16px;
   background-color: #f5f8fa;
-  color: #2c3e50;
+  color: #100601;
 }
 
 .resource-form input:focus,
 .resource-form select:focus,
 .resource-form textarea:focus {
-  border-color: #3498db;
+  border-color: #ab2323;
   outline: none;
-  box-shadow: 0 0 6px rgba(52, 152, 219, 0.6);
+  box-shadow: 0 0 6px rgba(203, 75, 28, 0.6);
 }
 
 .resource-form button {
   width: 100%;
   padding: 12px;
-  background-color: #2ecc71;
+  background-color: #ff5722;
   border: none;
   border-radius: 4px;
   color: white;
@@ -70,7 +70,7 @@
 }
 
 .resource-form button:hover {
-  background-color: #27ae60;
+  background-color: #ae5516;
 }
 
 .resource-form p {

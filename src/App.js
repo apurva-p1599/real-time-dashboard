@@ -5,6 +5,7 @@ import RealTimeUpdates from './RealTimeUpdates'; // Import the RealTimeUpdates c
 import Heatmaps from './Heatmaps'; // Import the Heatmaps component
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ResourceFormPage from './ResourceFormPage';  
+import AboutPage from './About';
 import NgoCoordination from './ngocordination';    
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/heatmaps" element={<Heatmaps />} /> {/* New Route for Heatmaps */}
           <Route path="/allocate-resource" element={<ResourceFormPage />} />
           <Route path="/ngo-coordination" element={<NgoCoordination />} />
+          <Route path="/about" element={<AboutPage />} />
         </Routes>
       </div>
     </Router>
