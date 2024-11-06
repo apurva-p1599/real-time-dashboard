@@ -1,0 +1,35 @@
+/* Base styles for custom DivIcon */
+.custom-div-icon {
+  position: relative;
+}
+
+.marker-icon {
+  width: 15px;
+  height: 15px;
+  background-color: #007bff;
+  border-radius: 50%;
+}
+
+.glow-circle {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 45px;
+  height: 45px;
+}
+
+/* Glow effects based on magnitude */
+.red-glow .glow-circle {
+  background-color: rgba(255,0,0,0.5);
+  border-radius:50%;
+}
+
+.orange-glow .glow-circle {
+  background-color: rgba(255,165,0,0.5);
+  border-radius:50%;
+}
+
+.green-glow .glow-circle {
+  background-color: rgba(0,255,0,0.5);
+  border-radius:50%;
+}

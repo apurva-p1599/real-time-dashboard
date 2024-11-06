@@ -1,89 +1,161 @@
-/* Dashboard.css */
+/* General Styles */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif; /* Use a modern, clean font */
+  color: #333; /* Dark gray text for better readability */
+}
 
 .dashboard {
-  display: flex;
-  height: 100vh;
-  background-color: #f4f4f9;
-  font-family: Arial, sans-serif;
+  text-align: center;
 }
 
-.sidebar {
-  width: 250px;
+/* Header Section */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 20px;
-  background-color: #2c3e50;
-  color: #ecf0f1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  box-shadow: 3px 0 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  background-color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for header */
 }
 
-.sidebar h2 {
+.logo h1 {
   font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #e74c3c;
-  text-align: center;
 }
 
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  width: 100%;
+.logo span {
+  color: #f9a825; /* Accent color */
 }
 
-.sidebar ul li {
-  padding: 10px 0;
-  cursor: pointer;
-  color: #bdc3c7;
-  transition: color 0.3s;
+.navigation {
+  display: flex;
 }
 
-.sidebar ul li:hover {
-  color: #e74c3c;
-}
-
-.sidebar ul li a {
-  color: inherit;
+.navigation a {
+  margin-right: 20px;
   text-decoration: none;
-  display: block;
-  width: 100%;
+  color: black;
 }
 
-.sidebar button {
-  background-color: #4CAF50;
-  color: #ecf0f1;
+.donate-btn {
+  background-color: #f9a825; /* Bright yellow button */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px; /* Rounded corners */
   border: none;
-  padding: 10px;
-  cursor: pointer;
-  margin-top: 20px;
-  width: 100%;
-  border-radius: 5px;
-  font-size: 16px;
-  transition: background-color 0.3s;
 }
 
-.sidebar button:hover {
-  background-color: #45a049;
+.donate-btn:hover {
+  background-color: #e68a00; /* Darker yellow on hover */
 }
 
-.content-container {
-  flex: 1;
+/* Hero Section */
+.hero-section {
+  position: relative;
+  height: calc(100vh - 80px); /* Full height minus header height */
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: -80px; /* Extend slightly below to allow overlap with feature section */
+  background-color: rgba(0,0,0,0.5); /* Darker overlay for better contrast */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  overflow-y: auto;
-  background-color: #ecf0f1;
 }
 
-.content-container img {
-  width: 90%; /* Make the image take up most of the container's width */
-  max-width: 1200px; /* Limit the maximum width for larger screens */
-  height: auto;
-  border-radius: 8px; /* Add rounded corners */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Darker shadow for emphasis */
+.hero-overlay h1 {
+  font-size: calc(2.5rem + .5vw); /* Responsive heading size */
+  color: white; /* White text for better contrast */
+}
+
+.hero-overlay p {
+  font-size: calc(1rem + .2vw); /* Responsive subheading size */
+  color: white; /* White text */
+}
+
+.hero-buttons {
+    margin-top :50px ;
+}
+
+
+
+
+
+/* Features Section - Adjusted to Shift Upwards */
+.features-section {
+    display:flex; 
+    justify-content:center; 
+    padding-top :40px; 
+    padding-bottom :40px; 
+    gap :40px; 
+    background-color:#f9f9f9; /* Light gray background for feature section */ 
+    position :relative ;  
+    margin-top :-100px ; /* Negative margin to pull it above the hero section slightly */ 
+    z-index :10 ; /* Ensure it's above the hero image */ 
+    box-shadow :0px10px20px rgba(0,0,0,0.15); /* Subtle shadow for floating effect */
+}
+
+.feature{
+   width :250px ;  
+   background:rgb(224, 223, 223) ;  
+   padding :20px ;  
+   box-shadow :0px4px8px rgba(0,0,0,0.1);  
+   border-radius :8px ;  
+   text-align:center ;  
+   transition :transform .3s ease ;  
+} 
+
+.feature:hover{
+   transform :scale(1.05) ;  
+} 
+
+.feature .icon{
+   font-size :2rem ;  
+   color:#f9a825 ;   
+} 
+
+.feature h3{
+   margin-top :10px ;  
+   font-size :18px ;   
+} 
+
+.feature p{
+   margin-top :10px ;
+   font-size :14px ;
+} 
+
+.feature a{
+   margin-top :10px ;
+   display:inline-block ;
+   text-decoration:none ;
+   color:#ff5722 ;
+} 
+
+/* Real-Time Updates Button */
+
+
+.real-time-updates-btn2 {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: 10px;
   margin-bottom: 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition for background color and scale */
+}
+
+/* Hover effect */
+.real-time-updates-btn2:hover {
+  background-color: #e64a19; /* Darker shade of orange on hover */
+  transform: scale(1.05); /* Slightly scale the button */
 }

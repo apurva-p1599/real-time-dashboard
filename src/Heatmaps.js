@@ -33,18 +33,19 @@ const Heatmaps = () => {
         <button
           onClick={() => navigate('/')} // Navigate back to the dashboard
           style={{
-            backgroundColor: '#007BFF', // Blue background color
+            backgroundColor: '#ff5722', // orange background color
             color: 'white', // White text color
             border: 'none', // No border
             padding: '10px 20px', // Padding for a better look
             cursor: 'pointer', // Pointer cursor on hover
-            marginBottom: '20px', // Margin below the button
+            marginBottom: '10px', // Margin below the button
+            marginTop: '20px', // Margin top the button
             borderRadius: '5px', // Slightly rounded corners
             fontSize: '16px', // Increased font size
             transition: 'background-color 0.3s', // Transition for hover effect
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0056b3')} // Darker blue on hover
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#007BFF')} // Original blue on mouse leave
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#ae5516')} // Darker orange on hover
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ff5722')} // Original blue on mouse leave
         >
           Back to Dashboard
         </button>
